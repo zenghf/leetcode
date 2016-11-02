@@ -3,39 +3,40 @@ public class Solution {
         if (numRows == 1)
             return s;
         int n = s.length();
-        StringBuilder zigzag = new StringBuilder();
-        // if (numRows == 2){
-        //     for (int i = 0; i < n; i += 2)
-        //         zigzag.append(s.charAt(i));
-        //     for (int i = 1; i < n; i += 2)
-        //         zigzag.append(s.charAt(i));
-        //     return new String(zigzag);
-        // }
+        char[] zigzag = new char[n];
 
-        for (int row = 0; row < numRows; row++){
-            int inc1 = 2 * numRows - 2 - 2 * row;
-            int inc2 = 2 * row;
-            int[] inc = {inc1, inc2};
-            if (inc1 == 0)
-                inc = new int[] {inc2};
-            else if (inc2 == 0)
-                inc = new int[] {inc1};
-            int curr = row;
-            int ind = 0;
-            int indLength = inc.length;
+        int cycle = 2 * numRows - 2;
+        int k = 0;
+        int curr = 0;
+        while(curr < n){
+            zigzag[k++] = s.charAt(curr);
+            curr += cycle;
+        }
+        // System.out.println(new String(zigzag));
+        for (int row = 1; row < numRows - 1; row++){
+            int inc = cycle - 2 * row;
+            curr = row;
             while (curr < n){
-                zigzag.append(s.charAt(curr));
-                curr += inc[ind];
-                ind = (ind + 1) % indLength;
+                // System.out.println("" + row + " " + curr + " " );
+                zigzag[k++] = s.charAt(curr);
+                curr += inc;
+                inc = cycle - inc;
             }
+        }
+        // System.out.println(new String(zigzag));
+        curr = numRows - 1;
+        while(curr < n){
+            // System.out.println("" + k + " " + curr + " " + n);
+            zigzag[k++] = s.charAt(curr);
+            curr += cycle;
         }
         return new String(zigzag);
     }
 
     public static void main(String[] args){
         Solution solution = new Solution();
-        String s = solution.convert("ABCD", 2);
-        System.out.println(s.length());
+        String s = solution.convert("ABCD", 4);
+        // System.out.println(s.length());
         System.out.println(s);
     }
 }
