@@ -2,40 +2,43 @@ public class Solution {
     public int reverse(int x) {
         if (x == -2147483648)
             return 0;
-        String minus = "";
-        if (x < 0){
-            x = -x;
-            minus = "-";
-        }
-        Integer X = new Integer(x);
-        String s = X.toString();
-        StringBuilder sb = new StringBuilder(s.length() + 1);
-        sb.append(minus);
 
-        // check over flow
         // MAX_INT = 2147483647
         // MIN_INT = -2147483648
-        String max = "2147483647";
-        if (minus.length() == 1)
-            max = "2147483648";
-        // System.out.println(s);
-        if (s.length() == 10){
-            for(int i = 9; i >= 0; i--){
-                // System.out.println(s.charAt(i) + " " + max.charAt(9 - i));
-                int d = s.charAt(i) - max.charAt(9 - i);
-                if (d > 0)
-                    return 0;
-                if (d < 0)
-                    break;
+        boolean negative = x < 0;
+        if (x < 0)
+            x = -x;
+        int [] max = {2, 1, 4, 7, 4, 8, 3, 6, 4, 7};
+        int [] xlist = new int[10];
+        if (negative)
+            max[9] = 8;
+        int k = 9;
+        for (int i = 0; i < 10; i++){
+            xlist[i] = x % 10;
+            x = x / 10;
+            if (x == 0){
+                k = i;
+                break;
             }
         }
 
-        for (int i = s.length() - 1; i >= 0; i--){
-            sb.append(s.charAt(i));
+        if (k == 9){
+            for (int i = 0; i < 10; i++){
+                int d = xlist[i] - max[i];
+                if (d < 0)
+                    break;
+                if (d > 0)
+                    return 0;
+            }
         }
-        String invs = new String(sb);
-        System.out.println(invs);
-        int invx = Integer.parseInt(invs);
+
+        int invx = 0;
+        int [] order = {1000000000, 100000000, 10000000, 1000000, 100000, 10000, 1000, 100, 10, 1};
+        for (int i = 0; i < k + 1; i++)
+            invx += order[9 - k + i] * xlist[i];
+        if (negative)
+            invx = -invx;
+
         return invx;
     }
 
