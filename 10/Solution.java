@@ -42,7 +42,7 @@ public class Solution {
                 ind = s.indexOf(middle, fromIndex);
                 if (ind == -1)
                     return false;
-                if (isMatch(s.substring(0, ind), left) && isMatch(s.substring(ind + len), right))
+                else if (isMatch(s.substring(ind + len), right) && isMatch(s.substring(0, ind), left))
                     return true;
                 fromIndex = ind + 1;
             }
