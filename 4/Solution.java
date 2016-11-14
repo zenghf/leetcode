@@ -4,6 +4,11 @@ public class Solution {
         int n2 = nums2.length;
         int m1 = n1 / 2;
         int m2 = n2 / 2;
+        int m = m1 > m2 ? m2 : m1;
+
+    }
+    public double median(int[] nums1, int[] nums2, int start1, int end1, int start2, int end2){
+        f 
     }
 
     public void printNums(String hint, int[] nums){
