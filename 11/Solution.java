@@ -1,76 +1,48 @@
 public class Solution {
     public int maxArea(int[] height) {
         int n = height.length;
-        boolean right_limit = false;
-        int right_end = n - 1;
         if (n < 2)
             return 0;
+        int prev_left = 0, prev_right = n - 1;
         int left = 0, right = n - 1;
-        boolean left_small = true;
-        int maxArea = 0;
-        while (left < right){
-            // System.out.println("left: " + left + " right: " + right);
-            int most_left = left, most_right = right;
+        int maxArea = (n - 1) * (height[0] < height[n - 1] ? height[0] : height[n - 1]);
+        while(true){
+            System.out.println("left: " + height[left] + " right: " + height[right]);
+            boolean left_small = height[left] < height[right];
             if (left_small){
-                int l = left;
-                if (height[l] == 0){
-                    left++;
-                    continue;
-                }
-                for (int r = l + maxArea / height[l] + 1; r <= right; r++){
-                    boolean temp_left_small = height[l] < height[r];
-                    int area = (temp_left_small ? height[l] : height[r]) * (r - l);
-                    if (area >= maxArea) {
-                        left_small = temp_left_small;
+                for (int l = left; l < right; l++){
+                    // System.out.println("<" + height[l] + " maxArea: " + maxArea + " left: " + height[left]);
+                    int area = (height[l] < height[right] ? height[l] : height[right]) * (right - l);
+                    if (area >= maxArea){
+                        left = l;
                         maxArea = area;
-                        most_right = r;
                     }
+                    if (height[l] >= height[right]){
+                        left = l;
+                        break;
+                    }
+                    // System.out.println("--<" + height[l] + " maxArea: " + maxArea + " left: " + height[left]);
                 }
             }
             else{
-                int r = right;
-                if (height[r] == 0){
-                    right--;
-                    continue;
-                }
-                for (int l = r - maxArea / height[r] - 1; l >= left; l--){
-                    // System.out.println("left: " + left + " right: " + right + " l: " + l + " r: " + r);
-                    boolean temp_left_small = height[l] < height[r];
-                    int area = (temp_left_small ? height[l] : height[r]) * (r - l);
-                    if (area >= maxArea) {
-                        left_small = temp_left_small;
+                for (int r = right; r > left; r--){
+                    int area = (height[left] < height[r] ? height[left] : height[r]) * (r - left);
+                    if (area >= maxArea){
+                        right = r;
                         maxArea = area;
-                        most_left = l;
+                    }
+                    if (height[r] > height[left]){
+                        right = r;
+                        break;
                     }
                 }
             }
-
-            if (left_small){
-                left++;
-                if (most_right < right)
-                    right = most_right;
-            }
-            else{
-                right--;
-                if (most_left > left)
-                    left = most_left;
-            }
+            if (left == prev_left && right == prev_right)
+                break;
+            prev_left = left;
+            prev_right = right;
         }
 
-        // for (int left = 0; left < n - 1; left++){
-        //     if (right_limit)
-        //     if ((n - 1 - left) * height[left] < maxArea || height[left] == 0)
-        //         continue;
-        //     int right_start = left + maxArea / height[left] + 1;
-        //     System.out.println("left: " + left + " right_start: " + right_end);
-        //     for (int right = right_start; right < n; right++){
-        //         int width = right - left;
-        //         int h = height[left] < height[right] ? height[left] : height[right];
-        //         int area = width * h;
-        //         if (area > maxArea)
-        //             maxArea = area;
-        //     }
-        // }
         return maxArea;
     }
 
@@ -80,7 +52,7 @@ public class Solution {
         int[] height = new int[n];
         for (int i = 0; i < n; i++)
             height[i] = n - i;
-        // int[] height = {0,14,6,2,10,9,4,1,10,3};
+        // int[] height = {2,3,4,5,18,17,6};
         int result = solution.maxArea(height);
         System.out.println("____________");
         System.out.println(result);
