@@ -1,11 +1,16 @@
+import java.util.HashMap;
+
 public class Solution {
     public int romanToInt(String s) {
-        // char[] c = {'I', 'V', 'X', 'L', 'C', 'D', 'M'};
-        String b = "IVXLCDM";
+        char[] cs = {'I', 'V', 'X', 'L', 'C', 'D', 'M'};
+        // String b = "IVXLCDM";
         int[] n = {1, 5, 10, 50, 100, 500, 1000};
+        HashMap<Character, Integer> m = new HashMap<>();
+        for (int i = 0; i < 7; i++)
+            m.put(cs[i], n[i]);
         int prev = 0, curr = 0, num = 0;
         for (char c : s.toCharArray()){
-            curr = n[b.indexOf(c)];
+            curr = m.get(c);
             if (curr > prev)
                 num -= prev;
             else
