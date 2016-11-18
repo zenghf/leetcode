@@ -1,19 +1,14 @@
-import java.util.ArrayList;
-
 public class Solution {
     public int firstMissingPositive(int[] nums) {
         int n = nums.length;
-        int indJunk = n - 1;
-        // boolean swapSmallerNumber = false;
-        for (int j = 0; j < 1; j++){
-            for (int i = 0; i <= indJunk; i++){
-                int num = nums[i];
-                while (num - 1 < i && num > 0 && nums[i] != nums[num -1]){
-                    swap(nums, num - 1, i);
-                    num = nums[i];
-                    print(i, nums);
-
-                }
+        for (int i = 0; i < n; i++){
+            int num = nums[i];
+            while (num - 1 < i && num > 0 && nums[i] != nums[num -1]){
+                // swap(nums, num - 1, i);
+                nums[i] = nums[num - 1]
+                nums[num - 1] = num;
+                num = nums[i];
+                // print(i, nums);
             }
         }
         for (int i = 0; i < n; i++){
