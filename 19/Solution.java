@@ -5,7 +5,7 @@ public class Solution {
         int N = 0;
         ListNode front = dummy;
         ListNode behind = dummy;
-        for (int i = 0; i <= n + 1; i++)
+        for (int i = 0; i <= n; i++)
             front = front.next;
 
         while(front != null){
