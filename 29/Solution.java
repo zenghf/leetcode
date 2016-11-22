@@ -1,4 +1,14 @@
 public class Solution {
+    private static int[] twoPower;
+    static {
+        twoPower = new int[32];
+        int num = 1;
+        for (int i = 0; i < 31; i++){
+            twoPower[i] = num;
+            num = num + num;
+        }
+    }
+
     public int divide(int dividend, int divisor) {
         if (divisor == 0)
             return Integer.MAX_VALUE;
@@ -10,14 +20,14 @@ public class Solution {
             else
                 return -dividend;
         }
-        if (dividend == 0)
-            return 0;
         if (divisor == Integer.MIN_VALUE){
             if (dividend == Integer.MIN_VALUE)
                 return 1;
             else
                 return 0;
         }
+        if (dividend == 0)
+            return 0;
 
         boolean isPositive = (dividend > 0) == (divisor > 0);
         int b = divisor > 0 ? divisor : -divisor;
@@ -30,17 +40,10 @@ public class Solution {
         else
             a = dividend > 0 ? dividend : -dividend;
         int[] array = new int[32];
-        int[] twoPower = new int[32];
         int i = 0;
-        int num = 1;
-        for (i = 0; i < 32; i++){
-            twoPower[i] = num;
-            num = num + num;
-        }
-        i = 0;
-        num = b;
-        for(i = 0; i < 30 && num <= a; i++){
-            array[i] = num;
+        int num = b;
+        while(num <= a){
+            array[i++] = num;
             if (num >= 1073741824)
                 break;
             num = num + num;
@@ -48,11 +51,11 @@ public class Solution {
         for (int j = 0; j < 32; j++)
             System.out.println("" + j + " " + array[j]);
         // i--;
-        if (i >= 30)
-            i = 29;
+        while(i >= 0 && array[i] == 0)
+            i--;
         int res = 0;
         for(; i >= 0 && a > 0 ; i--){
-            if (a >= array[i] && array[i] > 0){
+            if (a >= array[i]){
                 System.out.println("" + i + " " + a + " " + array[i] + " " + twoPower[i]);
                 res += twoPower[i];
                 a = a - array[i];
