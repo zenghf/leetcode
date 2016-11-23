@@ -48,15 +48,15 @@ public class Solution {
                 break;
             num = num + num;
         }
-        for (int j = 0; j < 32; j++)
-            System.out.println("" + j + " " + array[j]);
+        // for (int j = 0; j < 32; j++)
+        //     System.out.println("" + j + " " + array[j]);
         // i--;
         while(i >= 0 && array[i] == 0)
             i--;
         int res = 0;
         for(; i >= 0 && a > 0 ; i--){
             if (a >= array[i]){
-                System.out.println("" + i + " " + a + " " + array[i] + " " + twoPower[i]);
+                // System.out.println("" + i + " " + a + " " + array[i] + " " + twoPower[i]);
                 res += twoPower[i];
                 a = a - array[i];
             }
