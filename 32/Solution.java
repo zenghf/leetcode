@@ -2,49 +2,57 @@ public class Solution {
     public int longestValidParentheses(String s) {
         if (s.length() < 2)
             return 0;
-        int[] dic = new int[s.length()];
-        int maxLength = -1;
+        // table of the same length as `s`; 0 corresponds to '('
+        // a positive number n means the longest paired '(' is n character left to it
+        // -1 means no paired '('
+        int[] pairedRelativeIndex = new int[s.length()];
+        int maxRelLoc = -1;
         int fromIndex = 0;
         int i = s.indexOf(')', fromIndex);
         while (i >= 0){
-            int nPair = 1;
-            int curr = i;
-            int lowestValid = i + 1;
-            boolean canFindPair = true;
-            while (curr > 0){
-                curr--;
-                if (dic[curr] == 0){
-                    nPair--;
-                    if (nPair == 0)
-                        lowestValid = curr;
-                    else if (nPair < 0)
+            int curr = i - 1;
+            int minPairedInd = i + 1;
+            boolean foundOpeningParenthesis = false;
+            // System.out.println("i = " + i);
+            while (curr >= 0){
+                // System.out.println("curr = " + curr);
+                if (pairedRelativeIndex[curr] == 0){
+                    if (foundOpeningParenthesis)
                         break;
+                    else{
+                        foundOpeningParenthesis = true;
+                        minPairedInd = curr;
+                    }
+                    curr--;
                 }
-                else if (dic[curr] == -1){
+                else if (pairedRelativeIndex[curr] == -1){
                     break;
                 }
                 else{
-                    nPair++;
-                    curr = curr - dic[curr] + 1;
+                    if (foundOpeningParenthesis){
+                        minPairedInd = curr - pairedRelativeIndex[curr];
+                        break;
+                    }
+                    curr = curr - pairedRelativeIndex[curr] - 1;
                 }
             }
-            int length = i - lowestValid;
-            dic[i] = length;
-            if (length > maxLength)
-                maxLength = length;
+            int length = i - minPairedInd;
+            pairedRelativeIndex[i] = length;
+            if (length > maxRelLoc)
+                maxRelLoc = length;
             fromIndex = i + 1;
             i = s.indexOf(')', fromIndex);
         }
-        for (i = 0; i < s.length(); i++){
-            System.out.print(" " + dic[i]);
-        }
+        // for (i = 0; i < s.length(); i++){
+        //     System.out.print(" " + pairedRelativeIndex[i]);
+        // }
         System.out.println();
-        return maxLength + 1;
+        return maxRelLoc + 1;
     }
 
     public static void main(String[] args){
         Solution solution = new Solution();
-        String s = ")()())()()(";
+        String s = "()(())";
         System.out.println(s + " : " + solution.longestValidParentheses(s));
     }
 }
