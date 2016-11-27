@@ -29,28 +29,29 @@ public class Solution {
         ArrayList<Integer> comb = new ArrayList<>();
         int nextInd = 0;
         while(true){
-            // System.out.println("--> while: " + comb);
-            comb.add(cand.get(nextInd));
-            sum += cand.get(nextInd);
-            // System.out.println(": " + comb);
-            if (sum == target){
-                result.add(new ArrayList<Integer>(comb));
-                // System.out.println(comb);
+            int nextSum = sum + cand.get(nextInd);
+            if (nextSum < target){
+                comb.add(cand.get(nextInd));
+                sum += cand.get(nextInd);
+                continue;
             }
-            if (sum >= target){
-                sum -= comb.remove(comb.size() - 1);
-
-                while(!comb.isEmpty() && comb.get(comb.size() - 1) == max){
-                    comb.remove(comb.size() - 1);
-                    sum -= max;
-                }
-
-                if (comb.isEmpty())
-                    break;
-                int num = comb.remove(comb.size() - 1);
-                sum -= num;
-                nextInd = cand.indexOf(num) + 1;
+            if (nextSum == target){
+                ArrayList<Integer> tmp = new ArrayList<>(comb);
+                tmp.add(cand.get(nextInd));
+                result.add(tmp);
             }
+
+            while(!comb.isEmpty() && comb.get(comb.size() - 1) == max){
+                comb.remove(comb.size() - 1);
+                sum -= max;
+            }
+
+            if (comb.isEmpty())
+                break;
+            int num = comb.remove(comb.size() - 1);
+            sum -= num;
+            nextInd = cand.indexOf(num) + 1;
+
         }
 
         // if (hasTarget){
