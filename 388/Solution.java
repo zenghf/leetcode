@@ -1,8 +1,9 @@
-import java.util.ArrayList;
+import java.util.Stack;
 
 public class Solution {
     public int lengthLongestPath(String input) {
-        ArrayList<Integer> prefixLength = new ArrayList<>();
+        Stack<Integer> prefixLength = new Stack<>();
+        prefixLength.push(0);
         int maxLength = 0;
         String[] words = input.split("\n");
         for (String word: words){
@@ -13,15 +14,13 @@ public class Solution {
             // System.out.println(word + nTab);
             // prefixLength.set(0, 100);
             // System.out.println("word + nTab");
-            if (nTab == 0)
-                currLength = word.length();
-            else
-                currLength = word.length() - nTab + prefixLength.get(nTab - 1);
-            if (word.indexOf('.') != -1 && currLength > maxLength)
+            while(prefixLength.size() > nTab + 1)
+                prefixLength.pop();
+            currLength = word.length() - nTab + prefixLength.peek();
+            if (word.contains(".") && currLength > maxLength)
                 maxLength = currLength;
-            while(prefixLength.size() <= nTab )
-                prefixLength.add(0);
-            prefixLength.set(nTab, currLength + 1);
+            else
+                prefixLength.push(currLength + 1);
             // System.out.println(prefixLength);
         }
         return maxLength;
