@@ -1,64 +1,40 @@
 public class Solution {
     public ListNode sortList(ListNode head) {
+        // System.out.println("---> sortList: " + head.val);
         if (head == null || head.next == null)
             return head;
-        return sortList(head, null);
+        ListNode curr = head, slow = head, fast = head;
+        while(fast != null && fast.next != null){
+            curr = slow;
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        ListNode  l2 = curr.next;
+        curr.next = null;
+        ListNode l1 = sortList(head);
+        l2 = sortList(l2);
+        return merge(l1, l2);
     }
 
-    private ListNode sortList(ListNode head, ListNode tail){
-        ListNode leftHead = null, leftTail = null, rightHead = null, rightTail = null, curr = null, next = null;
-        ListNode midHead = null, midTail = null;
-        curr = head.next;
-        boolean findsFirstLeft = false;
-        boolean findsFirstRight = false;
-        boolean findsFirstMid = false;
-        while(curr != tail){
-            next = curr.next;
-            if (curr.val < head.val){
-                curr.next = leftHead;
-                leftHead = curr;
-                if (!findsFirstLeft){
-                    leftTail = curr;
-                    findsFirstLeft = true;
-                }
-            }
-            else if(curr.val > head.val){
-                curr.next = rightHead;
-                rightHead = curr;
-                if (!findsFirstRight){
-                    rightTail = curr;
-                    findsFirstRight = true;
-                }
+    private ListNode merge(ListNode l1, ListNode l2){
+        ListNode dummy = new ListNode(0);
+        ListNode curr = dummy;
+        while(l1 != null && l2 != null){
+            if (l1.val < l2.val){
+                curr.next = l1;
+                l1 = l1.next;
             }
             else{
-                curr.next = midHead;
-                midHead = curr;
-                if (!findsFirstMid){
-                    midTail = curr;
-                    findsFirstMid = true;
-                }
+                curr.next = l2;
+                l2 = l2.next;
             }
-            curr = next;
+            curr = curr.next;
         }
-
-        if (findsFirstMid)
-            head.next = midHead;
-        else
-            midTail = head;
-        if (findsFirstRight){
-            rightTail.next = tail;
-            midTail.next = sortList(rightHead, tail);
-        }
-        else{
-            midTail.next = tail;
-        }
-        if (findsFirstLeft){
-            leftTail.next = head;
-            return sortList(leftHead, head);
-        }
-        else{
-            return head;
-        }
+        if (l1 != null)
+            curr.next = l1;
+        if (l2 != null)
+            curr.next = l2;
+        return dummy.next;
 
     }
 
