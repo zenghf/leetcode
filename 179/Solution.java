@@ -10,17 +10,9 @@ public class Solution {
         Arrays.sort(ss, new Comparator<String>(){
             @Override
             public int compare(String o1, String o2){
-                int n = Math.max(o1.length(), o2.length());
-                int m = Math.min(o1.length(), o2.length());
-                int N = m;
-                while( N < n)
-                    N += m;
-                for (int i = 0; i < N; i++){
-                    int d = o1.charAt(i % o1.length()) - o2.charAt(i % o2.length());
-                    if (d != 0)
-                        return -d;
-                }
-                return 0;
+                String s1 = o1 + o2;
+                String s2 = o2 + o1;
+                return s2.compareTo(s1);
             }
         });
         if (ss.length == 0 || ss[0].equals("0"))
