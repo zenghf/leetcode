@@ -2,38 +2,28 @@ import java.util.Random;
 
 public class Solution {
 
-    private int[] inds;
     private int[] nums;
     private int n;
 
     public Solution(int[] nums) {
         this.nums = nums;
         this.n = nums.length;
-        this.inds = new int[this.n];
-        for (int i = 0; i < this.n; i++)
-            inds[i] = i;
     }
 
     /** Resets the array to its original configuration and return it. */
     public int[] reset() {
-        int[] nums2 = new int[this.n];
-        for (int i = 0; i < this.n; i++)
-            nums2[this.inds[i]] = this.nums[i];
-        for (int i = 0; i < this.n; i++)
-            this.inds[i] = i;
-        this.nums = nums2;
-        return nums2;
+        return this.nums;
     }
 
     /** Returns a random shuffling of the array. */
     public int[] shuffle() {
         Random rand = new Random();
+        int[] nums2 = this.nums.clone();
         for (int i = this.nums.length; i > 0; i--){
             int j = rand.nextInt(i);
-            swap(this.nums, i - 1, j);
-            swap(this.inds, i - 1, j);
+            swap(nums2, i - 1, j);
         }
-        return this.nums;
+        return nums2;
     }
 
     private void swap(int[] nums, int i, int j){
