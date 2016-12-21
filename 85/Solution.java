@@ -11,14 +11,14 @@ public class Solution {
             for (int w = 0; w < width; w++){
                 if (matrix[h][w] == '0')
                     continue;
-                // System.out.println("" + h + w);
+                System.out.println("" + h + w);
                 int ind = h * width + w;
                 HashMap<Integer, Integer> dic = getDic(table, ind);
                 for(int dw = 0; w + dw < width && matrix[h][w + dw] == '1'; dw++){
-                    Integer dh = dic.get(dw);
-                    if (dh == null)
-                        dh = 0;
-                    // System.out.println("dw dh: " + dw + dh);
+                    if (dic.containsKey(dw))
+                        continue;
+                    int dh = 0;
+                    System.out.println("dw dh: " + dw + dh);
                     boolean rowOK = true;
                     while(rowOK && dh + h + 1 < height){
                         for(int i = 0; i <= dw; i++){
@@ -31,7 +31,7 @@ public class Solution {
                         if (rowOK)
                             dh++;
                     }
-                    // System.out.println("h w, dh dw : "  + h + w + dh + dw + " ** " + (dh + 1) * (dw + 1));
+                    System.out.println("h w, dh dw : "  + h + w + dh + dw + " ** " + (dh + 1) * (dw + 1));
                     if ((dh + 1) * (dw + 1) > maxArea)
                         maxArea = (dh + 1) * (dw + 1);
                     for (int i = 1; i <= dh; i++)
