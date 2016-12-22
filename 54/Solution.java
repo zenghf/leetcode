@@ -7,48 +7,55 @@ public class Solution {
             return new ArrayList<Integer>();
         int height = matrix.length;
         int width = matrix[0].length;
-        // System.out.println("height: " + height + " width: " + width);
         int n = height * width;
-        int minLength = Math.min(height, width);
-        int nLoop = minLength / 2;
         ArrayList<Integer> result = new ArrayList<>(n);
-        int hmin = 0, hmax = height - 1, wmin = 0, wmax = width - 1;
-        int h = 0, w = -1;
-        // result.add(matrix[h][w]);
-        for (int i = 0; i < nLoop; i++){
-            // System.out.println("h = " + h + " w from " + w + " to " + wmax);
-            for(; w < wmax; w++)
-                result.add(matrix[h][w + 1]);
-            hmin++;
-            // System.out.println("w = " + w + " h from " + h + " to " + hmax);
-            for(; h < hmax; h++)
-                result.add(matrix[h + 1][w]);
-            wmax--;
-            for(; w > wmin; w--)
-                result.add(matrix[h][w - 1]);
-            hmax--;
-            for(; h > hmin; h--)
-                result.add(matrix[h - 1][w]);
-            wmin++;
+        if (width == 1){
+            for(int[] row : matrix)
+                result.add(row[0]);
+            return result;
         }
-        if (minLength % 2 == 1){
-            if (minLength == height){
-                for(; w < wmax; w++)
-                    result.add(matrix[h][w + 1]);
+        // System.out.println("height: " + height + " width: " + width);
+        int hmin = 1, hmax = height - 1, wmin = 0, wmax = width - 1;
+        int h = 0, w = 0, direction = 0;
+        for (int i = 0; i < n; i++){
+            // System.out.println(""+h+w);
+            result.add(matrix[h][w]);
+
+            if (direction == 0){
+                w++;
+                if (w == wmax){
+                    direction++;
+                    wmax--;
+                }
+            }
+            else if(direction == 1){
+                h++;
+                if (h == hmax){
+                    direction++;
+                    hmax--;
+                }
+            }
+            else if(direction == 2){
+                w--;
+                if(w == wmin){
+                    direction++;
+                    wmin++;
+                }
             }
             else{
-                w++;
-                result.add(matrix[h][w]);
-                for(; h < hmax; h++)
-                    result.add(matrix[h + 1][w]);
+                h--;
+                if(h == hmin){
+                    direction = 0;
+                    hmin++;
+                }
             }
         }
         return result;
     }
 
     public static void main(String[] args){
-        // int[][] matrix = {{1,2,3},{4,5,6},{7,8,9}};
-        int[][] matrix = {{1,2}};
+        // int[][] matrix = {{1,2,3,10},{4,5,6,11},{7,8,9,12}};
+        int[][] matrix = {{1},{2}};
         Solution solution = new Solution();
         List<Integer> result = solution.spiralOrder(matrix);
         for(int num : result){
