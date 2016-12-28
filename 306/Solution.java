@@ -1,7 +1,7 @@
 public class Solution {
     public boolean isAdditiveNumber(String num) {
         int n = num.length();
-        for (int i = 1; i < n - 1; i++){
+        for (int i = 1; i <= n / 2; i++){
             for (int j = i + 1; j < n; j++){
                 if (num.charAt(i) == '0' && j > i + 1)
                     break;
