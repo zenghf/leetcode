@@ -2,36 +2,25 @@ public class Solution {
     public int mySqrt(int x) {
         if (x == 0)
             return 0;
-        // if (x < 0)
-        //     throw new Exception();
         if (x >= 2147395600)
             return 46340;
         int X = x;
-        int b = 1;
-        while(X != 1){
-            X >>>= 1;
-            b++;
+        int r = 1;
+        while(X != 0){
+            X >>>= 2;
+            r <<= 1;
         }
-        double res = (1 << (b / 2)) + 0.0;
-        double res2 = (x / res + res) / 2.0;
-        while(Math.abs(res2 - res) > 0.1){
-            res = res2;
-            res2 = (x / res + res) / 2.0;
+        int r2 = (r + x / r) / 2;
+        while (r2 < r){
+            System.out.println(r2);
+            r = r2;
+            r2 = (r + x / r) / 2;
         }
-        int sqrt = (int) res2;
-        int sqr = sqrt * sqrt;
-        if (sqr == x)
-            return sqrt;
-        else if (sqr < x){
-            while( (sqrt + 1) * (sqrt + 1) < x)
-                sqrt++;
-            return sqrt;
-        }
-        else {
-            while( (sqrt - 1) * (sqrt - 1) > x)
-                sqrt--;
-            return sqrt;
-        }
+        return r;
+    }
 
+    public static void main(String[] args){
+        Solution solution = new Solution();
+        solution.mySqrt(2147395599);
     }
 }
