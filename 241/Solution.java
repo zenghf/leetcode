@@ -1,10 +1,16 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashMap;
 
 public class Solution {
+    private HashMap<Integer, HashMap<Integer, ArrayList<Integer>>> cache;
+    ArrayList<Integer> nums;
+    ArrayList<Character> symbols;
+
     public List<Integer> diffWaysToCompute(String input) {
-        ArrayList<Integer> nums = new ArrayList<>();
-        ArrayList<Character> symbols = new ArrayList<>();
+        nums = new ArrayList<>();
+        symbols = new ArrayList<>();
+        cache = new HashMap<>();
         int start = 0;
         for (int i = 0; i < input.length(); i++){
             if (input.charAt(i) == '+' || input.charAt(i) == '-' || input.charAt(i) == '*'){
@@ -15,19 +21,27 @@ public class Solution {
         }
         // System.out.println("" + start + "[" + input.substring(start, input.length()) + "]");
         nums.add(Integer.parseInt(input.substring(start, input.length())));
-        return compute(nums, symbols);
+        int n = symbols.size();
+        return compute(0, n);
         // return result;
     }
 
-    private ArrayList<Integer> compute(List<Integer> nums, List<Character> symbols){
+    private ArrayList<Integer> compute(int n1, int n2){
+        if (cache.get(n1) == null)
+            cache.put(n1, new HashMap<Integer, ArrayList<Integer>>());
+        HashMap<Integer, ArrayList<Integer>> cacheN1 = cache.get(n1);
+        if (cacheN1.get(n2) != null)
+            return cacheN1.get(n2);
         ArrayList<Integer> result = new ArrayList<>();
-        if (symbols.size() == 0){
-            result.add(nums.get(0));
+        cacheN1.put(n2, result);
+
+        if (n1 == n2){
+            result.add(nums.get(n1));
             return result;
         }
-        for (int i = 0; i < symbols.size(); i++){
-            ArrayList<Integer> list1 = compute(nums.subList(0, i+1), symbols.subList(0, i));
-            ArrayList<Integer> list2 = compute(nums.subList(i+1, nums.size()), symbols.subList(i + 1, symbols.size()));
+        for (int i = n1; i < n2; i++){
+            ArrayList<Integer> list1 = compute(n1, i);
+            ArrayList<Integer> list2 = compute(i + 1, n2);
             char sym = symbols.get(i);
             for (int a : list1){
                 for (int b : list2){
