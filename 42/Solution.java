@@ -2,42 +2,32 @@ public class Solution {
     public int trap(int[] height) {
         if (height == null || height.length <= 2)
             return 0;
-        int totalWater = 0;
+        int water = 0;
         int left = 0;
         int right = height.length - 1;
-        int h = height[0];
-        for (int i = 1; i < height.length; i++){
-            if (height[i] >= h){
-                if (i - left >= 2){
-                    int water = trap(height, left, i, h);
-                    totalWater += water;
+        int hLeft = height[left];
+        int hRight = height[right];
+        while(left < right){
+            if (hLeft <= hRight){
+                int i = left + 1;
+                while(height[i] < hLeft){
+                    water += (hLeft - height[i]);
+                    i++;
                 }
                 left = i;
-                h = height[i];
+                hLeft = height[left];
             }
-        }
-        h = height[right];
-        for (int i = height.length - 2; i >= left; i--){
-            if (height[i] >= h){
-                if (right - i >= 2){
-                    int water = trap(height, i, right, h);
-                    totalWater += water;
+            else{
+                int i = right - 1;
+                while(height[i] < hRight){
+                    water += (hRight - height[i]);
+                    i--;
                 }
                 right = i;
-                h = height[i];
+                hRight = height[right];
             }
         }
-        System.out.println(totalWater);
-        return totalWater;
-    }
-
-    private int trap(int[] height, int left, int right, int h){
-        int water = 0;
-        // int h = Math.min(height[left], height[right]);
-        for (int i = left + 1; i < right; i++)
-            water += (h - height[i]);
-
-        // System.out.println("left: " + left + " right: " + right + " h: " + h + " water: " + water);
+        System.out.println(water);
         return water;
     }
 
