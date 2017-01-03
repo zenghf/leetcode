@@ -7,9 +7,6 @@
  *     Interval(int s, int e) { start = s; end = e; }
  * }
  */
-
-import java.util.LinkedList;
-
 public class Solution {
     public List<Interval> merge(List<Interval> intervals) {
         Comparator<Interval> comparator = new Comparator<Interval>(){
@@ -24,29 +21,16 @@ public class Solution {
         };
         Collections.sort(intervals, comparator);
         LinkedList<Interval> res = new LinkedList<>();
-        int start = 0;
-        int end = Integer.MIN_VALUE;
+        Interval prev = null;
         for (Interval i : intervals){
-            if (i.start <= end){
-                end = Math.max(end, i.end);
+            if (prev == null || i.start > prev.end){
+                res.add(i);
+                prev = i;
             }
-            else{
-                if (end >= start)
-                    res.add(new Interval(start, end));
-                start = i.start;
-                end = i.end;
-            }
+            else if (i.end > prev.end)
+                prev.end = i.end;
         }
-        if (end >= start)
-            res.add(new Interval(start, end));
+
         return res;
-    }
-
-    public static void main(String[] args){
-        Solution solution = new Solution();
-        Interval interval = new Interval(1, 3);
-        LinkedList<Interval> list = new LinkedList<>();
-        list.add(interval);
-
     }
 }
