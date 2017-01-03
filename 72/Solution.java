@@ -8,26 +8,28 @@ public class Solution {
         }
         int m = sh.length();
         int[] cost = new int[m + 1];
-        int[] cost2 = new int[m + 1];
+        int prev = 0, curr = 0;
+        // int[] cost2 = new int[m + 1];
         for (int i = 0; i <= m; i++)
             cost[i] = i;
         for (int j = 0; j < lo.length(); j++){
-            cost2[0] = j + 1;
+            // cost2[0] = j + 1;
+            prev = j;
+            cost[0] = j + 1;
             for (int i = 0; i < m; i++){
                 if (lo.charAt(j) == sh.charAt(i))
-                    cost2[i + 1] = cost[i];
+                    curr = prev;
                 else{
-                    int min = cost2[i];
+                    int min = prev;
                     if (cost[i + 1] < min)
                         min = cost[i + 1];
                     if (cost[i] < min)
                         min = cost[i];
-                    cost2[i + 1] = min + 1;
+                    curr = min + 1;
                 }
+                prev = cost[i + 1];
+                cost[i + 1] = curr;
             }
-            int[] temp = cost2;
-            cost2 = cost;
-            cost = temp;
         }
         return cost[m];
     }
