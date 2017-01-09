@@ -3,16 +3,15 @@ import java.util.*;
 
 public class Solution {
     public String minWindow(String s, String t) {
-        HashMap<Character, Integer> count = new HashMap<>();
-        HashMap<Character, Integer> T = new HashMap<>();
+        int[] count = new int[128];
+        int[] T = new int[128];
         for (char ch : t.toCharArray())
-            T.put(ch, T.getOrDefault(ch, 0) + 1);
-        // System.out.println(T);
-
-        // HashMap<Character, Integer> S = new HashMap<>();
-        // for (char ch : s.toCharArray())
-        //     S.put(ch, S.getOrDefault(ch, 0) + 1);
-        // System.out.println(S);
+            T[ch]++;
+        int nUnique = 0;
+        for (int i = 0; i < 128; i++){
+            if (T[i] > 0)
+                nUnique++;
+        }
 
         int minStart = -1, minEnd = -1, minLen = Integer.MAX_VALUE, nOK = 0;
         int start = 0;
@@ -22,24 +21,24 @@ public class Solution {
 
         for (int i = 0; i < s.length(); i++){
             char ch = s.charAt(i);
-            if (T.containsKey(ch)){
-                count.put(ch, count.getOrDefault(ch, 0) + 1);
+            if (T[ch] > 0){
+                count[ch]++;
                 if (!findFirstWindow){
-                    if (count.get(ch).equals(T.get(ch)))
+                    if (count[ch] == T[ch])
                         nOK++;
                     // if (ch == 'a')
                     //     System.out.println("" + count.get(ch) + "   " + T.get(ch) + "   " + nOK);
                     // System.out.println("" + count + "\n\t" + nOK);
-                    if (nOK == T.size())
+                    if (nOK == nUnique)
                         findFirstWindow = true;
                 }
                 if (findFirstWindow){
                     char letter = s.charAt(start);
                     // System.out.println("i :" + i + " start: " + start + " letter: " + letter + "  " + T + "  " + count);
                     while(true){
-                        if (T.containsKey(letter)){
-                            if (count.get(letter) > T.get(letter))
-                                count.put(letter, count.get(letter) - 1);
+                        if (T[letter] > 0){
+                            if (count[letter] > T[letter])
+                                count[letter]--;
                             else
                                 break;
                         }
