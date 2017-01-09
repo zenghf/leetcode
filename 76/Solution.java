@@ -4,7 +4,6 @@ import java.util.*;
 public class Solution {
     public String minWindow(String s, String t) {
         HashMap<Character, Integer> count = new HashMap<>();
-        ArrayList<Integer> ind = new ArrayList<Integer>();
         HashMap<Character, Integer> T = new HashMap<>();
         for (char ch : t.toCharArray())
             T.put(ch, T.getOrDefault(ch, 0) + 1);
@@ -16,7 +15,7 @@ public class Solution {
         // System.out.println(S);
 
         int minStart = -1, minEnd = -1, minLen = Integer.MAX_VALUE, nOK = 0;
-        int indStart = 0;
+        int start = 0;
         boolean findFirstWindow = false;
 
         // System.out.println(T.size());
@@ -24,7 +23,6 @@ public class Solution {
         for (int i = 0; i < s.length(); i++){
             char ch = s.charAt(i);
             if (T.containsKey(ch)){
-                ind.add(i);
                 count.put(ch, count.getOrDefault(ch, 0) + 1);
                 if (!findFirstWindow){
                     if (count.get(ch).equals(T.get(ch)))
@@ -36,15 +34,22 @@ public class Solution {
                         findFirstWindow = true;
                 }
                 if (findFirstWindow){
-                    char first = s.charAt(ind.get(indStart));
-                    while(count.get(first) > T.get(first)){
-                        count.put(first, count.get(first) - 1);
-                        indStart++;
-                        first = s.charAt(ind.get(indStart));
+                    char letter = s.charAt(start);
+                    // System.out.println("i :" + i + " start: " + start + " letter: " + letter + "  " + T + "  " + count);
+                    while(true){
+                        if (T.containsKey(letter)){
+                            if (count.get(letter) > T.get(letter))
+                                count.put(letter, count.get(letter) - 1);
+                            else
+                                break;
+                        }
+                        start++;
+                        letter = s.charAt(start);
+                        // System.out.println("" + start + " " + letter);
                     }
-                    int len = i + 1 - ind.get(indStart);
+                    int len = i + 1 - start;
                     if (minStart == -1 || len < minLen){
-                        minStart = ind.get(indStart);
+                        minStart = start;
                         minEnd = i;
                         minLen = len;
                     }
@@ -62,10 +67,10 @@ public class Solution {
     public static void main(String[] args){
         Solution solution = new Solution();
         Scanner in = new Scanner(System.in);
-        // String s = in.nextLine();
-        // String t = in.nextLine();
-        String s = "a";
-        String t = "a";
+        String s = in.nextLine();
+        String t = in.nextLine();
+        // String s = "a";
+        // String t = "a";
         System.out.println(solution.minWindow(s, t));
     }
 }
