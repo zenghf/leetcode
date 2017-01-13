@@ -5,25 +5,30 @@ import java.util.Arrays;
 public class Solution {
     public List<List<Integer>> subsetsWithDup(int[] nums) {
         List<List<Integer>> res = new ArrayList<>();
+        res.add(new ArrayList<Integer>());
         Arrays.sort(nums);
-        backtrack(res, new ArrayList<Integer>(), nums, 0);
+        int i = 0;
+        while(i < nums.length){
+            int count = 1;
+            while(i + count < nums.length && nums[i + count] == nums[i])
+                count++;
+            int size = res.size();
+            for (int j = 0; j < size; j++){
+                List<Integer> list = new ArrayList<>(res.get(j));
+                for (int k = 0; k < count; k++){
+                    list.add(nums[i]);
+                    res.add(new ArrayList<Integer>(list));
+                }
+            }
+            i += count;
+        }
         return res;
     }
-    public void backtrack(List<List<Integer>> res, List<Integer> list, int[] nums, int start){
-        System.out.println("list:" + list + " start: " + start);
-        res.add(new ArrayList<Integer>(list));
-        for (int i = start; i < nums.length; i++){
-            if (i > start && nums[i] == nums[i - 1])
-                continue;
-            list.add(nums[i]);
-            backtrack(res, list, nums, i + 1);
-            list.remove(list.size() - 1);
-        }
-    }
+
 
     public static void main(String[] args){
         Solution solution = new Solution();
         int[] nums = {1, 2, 2};
-        solution.subsetsWithDup(nums);
+        System.out.println(solution.subsetsWithDup(nums));
     }
 }
